@@ -1,0 +1,20 @@
+{
+  "name": "qaz-plugins",
+  "interface": {
+    "displayName": "神的第一个插件"
+  },
+  "plugins": [
+    {
+      "name": "god-first-plugin",
+      "source": {
+        "source": "local",
+        "path": "./plugins/god-first-plugin"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

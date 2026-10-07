@@ -1,0 +1,25 @@
+# 密钥与解密数据（绝不入库）
+wx_key*.txt
+key_result*.txt
+decrypted/
+*_decrypted/
+
+# 导出的聊天记录
+微信聊天记录_*.txt
+messages_*.json
+
+# 整理日志
+organize_log_*.json
+
+# 陪伴记忆
+state.md
+.virtual-companion/
+
+# Python
+__pycache__/
+*.pyc
+
+# 系统
+Thumbs.db
+Desktop.ini
+.DS_Store

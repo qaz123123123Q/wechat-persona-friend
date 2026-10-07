@@ -1,0 +1,5 @@
+interface:
+  display_name: "Virtual Companion"
+  short_description: "In-character companion with memory that persists"
+  brand_color: "#E8798F"
+  default_prompt: "Use $virtual-companion to set up a companion persona I can talk to, and remember between sessions."
