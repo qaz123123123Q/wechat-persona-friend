@@ -1,6 +1,6 @@
 {
   "name": "god-first-plugin",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "一个插件装三个技能：读取本机微信聊天记录、虚拟陪伴人格、文件夹整理（先出方案再动手，可回滚）。",
   "author": {
     "name": "qaz123123123Q"
