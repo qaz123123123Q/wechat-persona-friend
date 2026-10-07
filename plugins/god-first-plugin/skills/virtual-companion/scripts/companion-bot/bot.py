@@ -145,6 +145,36 @@ BURST_LIMIT = 5       # 同一个会话 60 秒内最多回几条
 BURST_WINDOW = 60.0
 
 
+# ---- 回声熔断（最后一道保险）----
+# 机器人自己发出去的消息，飞书有时会当成新事件推回来。前面那三道门只要漏一道，
+# 她就会把自己的话当成新输入，一句接一句停不下来（表现：用户发一条，她回几十条）。
+# 这里记下自己最近说过的话：进来的消息如果跟刚说过的一模一样，判定是回声，直接丢。
+#
+# 已知取舍：用户如果原样重复了她刚说过的一句短话（比如「嗯嗯」），这条会被丢掉。
+# 两分钟内、完全一字不差才算回声，正常聊天撞上的概率很低。
+_sent_lock = threading.Lock()
+_sent_texts: dict[str, list[tuple[float, str]]] = {}
+ECHO_WINDOW = 120.0
+ECHO_KEEP = 40
+
+
+def remember_sent(chat_id: str, text: str) -> None:
+    now = time.time()
+    with _sent_lock:
+        items = [(t, s) for t, s in _sent_texts.get(chat_id, []) if now - t < ECHO_WINDOW]
+        items.append((now, text.strip()))
+        _sent_texts[chat_id] = items[-ECHO_KEEP:]
+
+
+def is_echo(chat_id: str, text: str) -> bool:
+    now = time.time()
+    target = text.strip()
+    with _sent_lock:
+        items = [(t, s) for t, s in _sent_texts.get(chat_id, []) if now - t < ECHO_WINDOW]
+        _sent_texts[chat_id] = items
+    return any(s == target for _, s in items)
+
+
 # ---------------------------------------------------------------- 记忆文件
 
 def read_text(path: Path, limit: int = 4000) -> str:
@@ -431,6 +461,8 @@ def send_text(chat_id: str, text: str) -> None:
     resp = client.im.v1.message.create(req)
     if not resp.success():
         print(f"[send fail] code={resp.code} msg={resp.msg}", flush=True)
+    else:
+        remember_sent(chat_id, text)
 
 
 # ---------------------------------------------------------------- 主逻辑
@@ -483,6 +515,13 @@ def handle(data: P2ImMessageReceiveV1) -> None:
         if not user_text:
             return
 
+        # ---- 第四道门：回声熔断 ----
+        # 走到这里说明前面三道都没拦住，但这段话如果是她自己刚说过的，那就是回声，
+        # 不能回，否则就进入"她跟自己聊"的死循环。
+        if is_echo(chat_id, user_text):
+            print(f"[echo] 丢掉一条回声：{user_text!r}", flush=True)
+            return
+
         print(f"[in] {user_text}", flush=True)
         append_chatlog(chat_id, "user", user_text)
         # 记住这个会话，提醒才有地方发
@@ -532,6 +571,8 @@ def main() -> None:
     print(f"模型     : {MODEL}")
     print(f"key      : {'已读到' if os.environ.get(API_KEY_ENV) else '缺失（' + API_KEY_ENV + '）'}")
     print("=" * 46)
+    if not BOT_OPEN_IDS:
+        print("⚠️  config.json 里没配 bot_open_id——'机器人自己发的消息'那道门会弱一档，建议补上", flush=True)
     if not os.environ.get(API_KEY_ENV):
         sys.exit("没有读到 API key，先按 README 设置环境变量")
 
