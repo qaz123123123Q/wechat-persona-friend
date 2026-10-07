@@ -13,7 +13,7 @@
 ## 安装
 
 ```powershell
-codex plugin marketplace add <owner>/wechat-reader
+codex plugin marketplace add <owner>/wechat-persona-friend
 codex plugin add god-first-plugin@god-first-plugin
 ```
 
