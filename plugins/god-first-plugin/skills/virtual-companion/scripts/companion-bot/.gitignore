@@ -1,0 +1,9 @@
+# 绝不入库：App 凭证、API key、运行产物
+config.json
+env.sh
+.env
+bot.log
+bot.out.log
+bot.err.log
+__pycache__/
+*.pyc

@@ -15,6 +15,17 @@ organize_log_*.json
 state.md
 .virtual-companion/
 
+# 飞书机器人的凭证与运行产物（绝不入库）
+config.json
+env.sh
+env*.sh
+bot.log
+bot.out.log
+bot.err.log
+feishu_chat_id
+seen_msg_ids.json
+reminder_state.json
+
 # Python
 __pycache__/
 *.pyc

@@ -1,0 +1,12 @@
+{
+  "app_id": "cli_改成你的AppID",
+  "app_secret": "改成你的AppSecret",
+  "persona_name": "改成你的人格名（留空则读 state.md 的 persona: 行）",
+  "memory_dir": "~/.virtual-companion",
+  "model": "deepseek-ai/DeepSeek-V3",
+  "api_base": "https://api.siliconflow.cn/v1",
+  "api_key_env": "SILICONFLOW_API_KEY",
+  "bot_open_id": "机器人自己的 open_id，用 /open-apis/bot/v3/info 可以拿到",
+  "history_turns": 20,
+  "reply_split": true
+}

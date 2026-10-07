@@ -1,6 +1,6 @@
 ---
 name: virtual-companion
-description: Use when the user wants an ongoing in-character companion to talk to — girlfriend, boyfriend, partner, or close friend（虚拟恋人 / 女友 / 男友 / 陪伴）— or asks to set up, resume, adjust, or continue one across sessions. 也负责记住日常事实、跟踪没做完的事，并按时间提醒用户。**用户只喊一个名字（如「某个名字」）时同样适用**：先去 ~/.virtual-companion/state.md 确认这是已建立的陪伴人格，不要反问"这是谁"。
+description: Use when the user wants an ongoing in-character companion to talk to — girlfriend, boyfriend, partner, or close friend（虚拟恋人 / 女友 / 男友 / 陪伴）— or asks to set up, resume, adjust, or continue one across sessions. 也负责记住日常事实、跟踪没做完的事、按时间提醒用户，以及把这个人格挂到手机上（飞书长连接 + Termux）。**用户只喊一个名字（如某个名字）时同样适用**：先去 ~/.virtual-companion/state.md 确认这是已建立的陪伴人格，不要反问"这是谁"。
 metadata:
   short-description: 会记住你、也会提醒你的陪伴型人格（跨会话）
 ---
@@ -132,6 +132,23 @@ rating: off
 > 读取 `~/.virtual-companion/reminders.md` 与 `state.md`，只处理**今天到期或已过期**的提醒；有就用陪伴人格的语气发一条提醒（1–2 句短消息），然后保持安静；没有到期的提醒就不要发任何消息。
 
 不要让它每次醒来都发"今天过得怎么样"——除非用户明确要每天问候。
+
+## 挂到手机上（飞书 + Termux）
+
+用户说"想随时在手机上找她说话""能不能弄到手机里""装到旧手机上"时，走这条。
+
+**方案**：飞书企业自建应用 + **长连接**接收事件 + 一台常开的旧安卓手机跑 Termux。
+选它的原因是长连接是**你的程序主动往外连**，所以不需要公网 IP、不需要内网穿透、不需要备案、不用买服务器，也不像微信个人号机器人那样违反服务协议。
+
+**完整步骤在** `references/deploy-feishu.md`，现成程序在 `scripts/companion-bot/`。要点：
+
+1. 完整链路是 **wechat-export（导出聊天记录）→ 本技能（提炼成 state.md）→ companion-bot（挂到飞书）**。只做最后一步，得到的是一个没有记忆的普通机器人。
+2. 飞书后台保存"长连接"那一刻，**程序必须已经在跑**，否则校验失败。
+3. 程序读的就是 `~/.virtual-companion/` —— 把电脑上那份 `state.md` / `reminders.md` 拷到手机，她才记得用户是谁。
+4. **API key 走环境变量，App Secret 只放 `config.json`，两者都不进 git。**
+5. 上线前先跟用户把三条代价说清楚：手机得一直开着且不能被系统杀后台；聊天内容会过飞书和模型厂商的服务器；手机里的密钥是明文的。
+
+**这条路上最该防的仍然是人设那份"不奖励依赖"**：工具越顺手，用户越容易半夜三点也去找她。别把"随时能找到"当成优点来讲。
 
 ## 诚实底线
 

@@ -1,7 +1,7 @@
 {
   "name": "god-first-plugin",
-  "version": "1.1.1",
-  "description": "一个插件装三个技能：读取本机微信聊天记录、虚拟陪伴人格、文件夹整理（先出方案再动手，可回滚）。",
+  "version": "1.2.0",
+  "description": "一个插件装三个技能：读取本机微信聊天记录、虚拟陪伴人格（可挂到手机飞书）、文件夹整理（先出方案再动手，可回滚）。",
   "author": {
     "name": "qaz123123123Q"
   },
@@ -9,14 +9,15 @@
   "keywords": [
     "wechat",
     "companion",
+    "feishu",
     "file-organizer",
     "productivity"
   ],
   "skills": "./skills/",
   "interface": {
     "displayName": "神的第一个插件",
-    "shortDescription": "读微信、虚拟陪伴、整理文件夹",
-    "longDescription": "三个独立技能装在一个插件里：wechat-export 读取并分析本机微信 4.x 聊天记录；virtual-companion 提供跨会话的陪伴人格（三层记忆结构 + 带时间的提醒协议）；file-organizer 按规则整理文件夹，默认先出方案、确认后才移动，并留下可回滚的操作记录。",
+    "shortDescription": "读微信、虚拟陪伴（可上手机）、整理文件夹",
+    "longDescription": "三个独立技能装在一个插件里：wechat-export 读取并分析本机微信 4.x 聊天记录；virtual-companion 提供跨会话的陪伴人格（三层记忆结构 + 带时间的提醒协议），并附带把这个人格挂到手机上常驻的完整方案（飞书长连接 + Termux，现成 bot 代码）；file-organizer 按规则整理文件夹，默认先出方案、确认后才移动，并留下可回滚的操作记录。",
     "developerName": "qaz123123123Q",
     "category": "Productivity",
     "capabilities": [
